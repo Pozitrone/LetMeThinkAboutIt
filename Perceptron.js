@@ -1,6 +1,14 @@
 var width = 800;
 var height = 800;
 
+function pX(x){
+    return x + width/2;
+}
+
+function pY(y){
+    return height/2 - y; 
+}
+
 function getRandom(min, max) {
     return Math.random() * (max - min) + min;
 }
@@ -53,7 +61,7 @@ class Perceptron{
         else{
             context.fillStyle = "#ff0000";
         }
-        context.fillRect(inputs[0],inputs[1],8,8);
+        context.fillRect(pX(inputs[0]),pY(inputs[1]),8,8);
     }
 
 }
@@ -66,17 +74,17 @@ class Point {
         let canvas = document.getElementById("canvas");
         let context = canvas.getContext("2d");
 
-        this.inputs[0] = randInt(width);
-        this.inputs[1] = randInt(height);
+        this.inputs[0] = randInt(width)-~~(width/2);
+        this.inputs[1] = randInt(height)-~~(height/2);
         this.answer = this.solution(this.inputs);
 
         let x = this.inputs[0];
         let y = this.inputs[1];
         context.fillStyle = "#0000ff";
-        context.fillRect(x-1,y-1,10,10);
+        context.fillRect(pX(x-1),pY(y+1),10,10);
 
         context.fillStyle = this.answer == 1 ? "#aaa" : "#eee";
-        context.fillRect(x,y,8,8);
+        context.fillRect(pX(x),pY(y),8,8);
     }
 
     solution(inputs){

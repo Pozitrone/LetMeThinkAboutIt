@@ -3,7 +3,7 @@
         <script src="./Perceptron.js"></script>
                <meta charset="UTF-8">
         <style>
-            canvas{
+            #canvas{
                 margin-left: calc(50vw - 400px);
                 margin-top: calc(50vh - 400px);
                 background-color: white;
@@ -11,6 +11,24 @@
             }
             body{
                 background-color: black;
+            }
+            #perry{
+                background-color:black;
+                border: red 2px solid;
+                float: right;
+                margin-right: 10vw;
+                margin-top: 30vh;
+            }
+            button{
+                position: absolute;
+                bottom: 10vh;
+                right: 250px;
+                border: white solid 2px;
+                border-radius: 10px;
+                color: white;
+                background-color: black;
+                padding: 3em;
+                font-weight: bold;
             }
         </style>
     </head>
@@ -20,25 +38,84 @@
             var arr = new Array();
             var it = 0;
 
+
+        function drawNeuron(){
+            let neuron = document.getElementById("perry");
+            let ctx = neuron.getContext("2d");
+
+            ctx.setLineDash([]);
+
+            ctx.beginPath();
+            ctx.textAlign = "left";
+            ctx.font = "25px Arial";
+            ctx.fillStyle = "white";
+            ctx.fillText("X", 10, 30);
+            ctx.fillText("Y", 10, 110);
+            ctx.fillText("b", 10, 190);
+            ctx.fillText("O", 270, 110);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.font = "20px Arial";
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.fillText("Perry", 150, 105);
+            ctx.stroke();
+
+
+            ctx.stroke();
+            ctx.strokeStyle = "white";
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.arc(150, 100, 40, 0, 2 * Math.PI);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.lineWidth = 10;
+            ctx.moveTo(200, 100);
+            ctx.lineTo(260,100);
+            ctx.stroke();
+
+
+
+            
+        }
+        
+        function drawWeights(){
+            let neuron = document.getElementById("perry");
+                let ctx = neuron.getContext("2d");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawNeuron();
+
+                
+                ctx.beginPath();
+                ctx.setLineDash([5,5]);
+                ctx.lineWidth = 10 * Math.abs(Perry.weights[0]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.biasWeight));
+                ctx.moveTo(40, 30);
+                ctx.lineTo(100,70);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.setLineDash([5,5]);
+                ctx.lineWidth = 10 * Math.abs(Perry.weights[1]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.biasWeight));
+                ctx.moveTo(40, 100);
+                ctx.lineTo(100,100);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.setLineDash([5,5]);
+                ctx.lineWidth = 10 * Math.abs(Perry.biasWeight) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.biasWeight));
+                ctx.moveTo(40, 180);
+                ctx.lineTo(100,140);
+                ctx.stroke();
+        }
+
         function jsOnInit(){
-            for (let i = 0; i < 100; i++){
+            for (let i = 0; i < 500; i++){
                 arr.push(new Point());
             }
 
-            let canvas = document.getElementById("canvas");
-            let context = canvas.getContext("2d");
-
-            console.log(arr);
-            arr[0].inputs = [0,0];
-
-            context.moveTo(0, 0);
-            context.lineTo(800, 800);
-            context.strokeStyle = "#FF0000";
-            context.stroke();
-
-            
-
-            
+            drawNeuron();
 
             setTimeout(()=>{
                 console.log("== Iteration " + it + " ==");
@@ -47,24 +124,47 @@
                 console.log("Weight b: " + Perry.biasWeight);
             },100);
             
+            let canvas = document.getElementById("canvas");
+            let context = canvas.getContext("2d");
+
+            context.beginPath();
+            context.moveTo(pX(-400), pY(-400));
+            context.lineTo(pX(400), pY(400));
+            context.strokeStyle = "#FF0000";
+            context.stroke();
+
+            context.beginPath();
+            context.lineWidth = 1;
+            context.strokeStyle = "#000000";
+            context.moveTo(pX(-400), pY(0));
+            context.lineTo(pX(400), pY(0));
+            context.moveTo(pX(0), pY(-400));
+            context.lineTo(pX(0), pY(400));
+            context.stroke();
+
+            //arr[0].inputs = [0,0];
         }
 
 
         function start(iterations=1){
-               it++;
-               arr.forEach(point => {
+            it++;
+            arr.forEach(point => {
                 let inputs = point.inputs;
                 let answer = point.answer;
                 Perry.train(inputs, answer);
-                }); 
-                console.log("== Iteration " + it + " ==");
-                console.log("Weight x: " + Perry.weights[0]);
-                console.log("Weight y: " + Perry.weights[1]);
-                console.log("Weight b: " + Perry.biasWeight);
-            }
+            }); 
+            console.log("== Iteration " + it + " ==");
+            console.log("Weight x: " + Perry.weights[0]);
+            console.log("Weight y: " + Perry.weights[1]);
+            console.log("Weight b: " + Perry.biasWeight);
+
+            drawWeights();
+
+        }
             
         </script>
         <canvas id="canvas" width="800" height="800"></canvas>
+        <canvas id="perry" width="300" height="200"></canvas>
         <button onclick="start(1)">Run Perry, run!</button>
     </body>
 </html>
