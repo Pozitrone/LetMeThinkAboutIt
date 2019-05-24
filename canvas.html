@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <script src="./Perceptron.js"></script>
+               <meta charset="UTF-8">
+        <style>
+            canvas{
+                margin-left: calc(50vw - 400px);
+                margin-top: calc(50vh - 400px);
+                background-color: white;
+                border: red 2px solid;
+            }
+            body{
+                background-color: black;
+            }
+        </style>
+    </head>
+    <body onload="jsOnInit()">
+        <script>
+        var Perry = new Perceptron();    
+        var arr = new Array(100);
+        var it = 0;
+
+        function jsOnInit(){
+            let canvas = document.getElementById("canvas");
+            let context = canvas.getContext("2d");
+
+            context.moveTo(0, 0);
+            context.lineTo(800, 800);
+            context.strokeStyle = "#FF0000";
+            context.stroke();
+
+            
+
+            for (let i = 0; i < 100; i++){
+                arr.push(new Point());
+            }
+
+            setTimeout(()=>{
+                console.log("== Iteration " + it + " ==");
+                console.log("Weight x: " + Perry.weights[0]);
+                console.log("Weight y: " + Perry.weights[1]);
+            },100);
+            
+        }
+
+
+        function start(iterations=1){
+               it++;
+               arr.forEach(point => {
+                let inputs = point.inputs;
+                let answer = point.answer;
+                Perry.train(inputs, answer);
+                }); 
+                console.log("== Iteration " + it + " ==");
+                console.log("Weight x: " + Perry.weights[0]);
+                console.log("Weight y: " + Perry.weights[1]);
+            }
+            
+        </script>
+        <canvas id="canvas" width="800" height="800"></canvas>
+        <button onclick="start(1)">Run Perry, run!</button>
+    </body>
+</html>
