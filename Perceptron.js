@@ -1,6 +1,12 @@
 var width = 800;
 var height = 800;
 
+function f(x){
+    //y = ax+b
+    return 2 * x + 5;
+}
+
+
 function pX(x){
     return x + width/2;
 }
@@ -20,6 +26,7 @@ function randInt(max) {
 function sign(num){
     return num >= 0 ? 1 : -1;
 }
+
 
 class Perceptron{
     weights = new Array(2);
@@ -90,6 +97,8 @@ class Point {
     solution(inputs){
         let x = inputs[0];
         let y = inputs[1];
-        return x >= y ? 1 : -1;
+        let lineY = f(x);
+
+        return y > lineY ? 1 : -1;
     }
 }
