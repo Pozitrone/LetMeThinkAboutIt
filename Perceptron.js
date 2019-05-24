@@ -3,7 +3,7 @@ var height = 800;
 
 function f(x){
     //y = ax+b
-    return 2 * x + 5;
+    return 2 * x;
 }
 
 
