@@ -15,12 +15,15 @@ function sign(num){
 
 class Perceptron{
     weights = new Array(2);
+    bias = 1;
+    biasWeight = 0;
     
 
     constructor () {
         for (let i = 0, j = this.weights.length; i < j; i++){
             this.weights[i] = getRandom(-1,1);
         }
+        this.biasWeight = getRandom(-1,1);
     }
 
     guess(inputs){
@@ -28,6 +31,7 @@ class Perceptron{
         for (let i = 0, j = this.weights.length; i < j; i++){
             sum += this.weights[i] * inputs[i];
         }
+        sum += this.bias * this.biasWeight;
         return sign(sum);
     }
 
@@ -40,6 +44,8 @@ class Perceptron{
         for(let i = 0, j = this.weights.length; i < j; i++){
             this.weights[i] += error * inputs[i] * learningRate;
         }
+
+        this.biasWeight += error * this.bias * learningRate;
 
         if(guess == answer){
             context.fillStyle = "#00ff00";
