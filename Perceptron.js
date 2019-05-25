@@ -3,10 +3,8 @@ var height = 800;
 
 function f(x){
     //y = ax+b
-    return 20;
+    return 4 * x + 100;
 }
-
-
 function pX(x){
     return x + width/2;
 }
@@ -24,21 +22,16 @@ function randInt(max) {
 }
 
 function sign(num){
-    return num >= 0 ? 1 : -1;
+    return num > 0 ? 1 : -1;
 }
 
 
 class Perceptron{
-    weights = new Array(2);
-    bias = 1;
-    biasWeight = 0;
-    
-
-    constructor () {
+    constructor (n) {
+        this.weights = new Array(n+1);
         for (let i = 0, j = this.weights.length; i < j; i++){
             this.weights[i] = getRandom(-1,1);
-        }
-        this.biasWeight = getRandom(-1,1);
+        }        
     }
 
     guess(inputs){
@@ -46,7 +39,6 @@ class Perceptron{
         for (let i = 0, j = this.weights.length; i < j; i++){
             sum += this.weights[i] * inputs[i];
         }
-        sum += this.bias * this.biasWeight;
         return sign(sum);
     }
 
@@ -59,7 +51,6 @@ class Perceptron{
         for(let i = 0, j = this.weights.length; i < j; i++){
             this.weights[i] += error * inputs[i] * learningRate;
         }
-        this.biasWeight += error * this.bias * learningRate;
 
         if(guess == answer){
             context.fillStyle = "#00ff00";
@@ -71,21 +62,24 @@ class Perceptron{
     }
 
     guessY(x){
-        return -(Perry.biasWeight/Perry.weights[1]) - (Perry.weights[0]/Perry.weights[1]) * x
+        return (- this.weights[2]*800 - this.weights[0] * x ) / this.weights[1];
     }
 
 }
 
 class Point {
-    inputs = new Array(2);
+    inputs;
     answer = 0;
 
-    constructor () {
+    constructor (n) {
         let canvas = document.getElementById("canvas");
         let context = canvas.getContext("2d");
 
+        this.inputs = new Array(n+1);
+
         this.inputs[0] = randInt(width)-Math.floor(width/2);
         this.inputs[1] = randInt(height)-Math.floor(height/2);
+        this.inputs[2] = 1; //bias
         this.answer = this.solution(this.inputs);
 
         let x = this.inputs[0];

@@ -45,7 +45,7 @@
     </head>
     <body onload="jsOnInit()">
         <script>
-            var Perry = new Perceptron();    
+            var Perry = new Perceptron(2);    
             var arr = new Array();
             var it = 0;
 
@@ -101,21 +101,21 @@
                 
                 ctx.beginPath();
                 ctx.setLineDash([5,5]);
-                ctx.lineWidth = 10 * Math.abs(Perry.weights[0]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.biasWeight));
+                ctx.lineWidth = 10 * Math.abs(Perry.weights[0]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.weights[2]));
                 ctx.moveTo(40, 30);
                 ctx.lineTo(100,70);
                 ctx.stroke();
 
                 ctx.beginPath();
                 ctx.setLineDash([5,5]);
-                ctx.lineWidth = 10 * Math.abs(Perry.weights[1]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.biasWeight));
+                ctx.lineWidth = 10 * Math.abs(Perry.weights[1]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.weights[2]));
                 ctx.moveTo(40, 100);
                 ctx.lineTo(100,100);
                 ctx.stroke();
 
                 ctx.beginPath();
                 ctx.setLineDash([5,5]);
-                ctx.lineWidth = 10 * Math.abs(Perry.biasWeight) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.biasWeight));
+                ctx.lineWidth = 10 * Math.abs(Perry.weights[2]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.weights[2]));
                 ctx.moveTo(40, 180);
                 ctx.lineTo(100,140);
                 ctx.stroke();
@@ -123,7 +123,7 @@
 
         function jsOnInit(){
             for (let i = 0; i < 500; i++){
-                arr.push(new Point());
+                arr.push(new Point(2));
             }
 
             drawNeuron();
@@ -132,7 +132,7 @@
                 console.log("== Iteration " + it + " ==");
                 console.log("Weight x: " + Perry.weights[0]);
                 console.log("Weight y: " + Perry.weights[1]);
-                console.log("Weight b: " + Perry.biasWeight);
+                console.log("Weight b: " + Perry.weights[2]);
             },100);
             
             let canvas = document.getElementById("canvas");
@@ -206,12 +206,12 @@
             arr.forEach(point => {
                 let inputs = point.inputs;
                 let answer = point.answer;
-                Perry.train(inputs, answer, 0.1);
+                Perry.train(inputs, answer, 1);
             }); 
             console.log("== Iteration " + it*iterations + " ==");
             console.log("Weight x: " + Perry.weights[0]);
             console.log("Weight y: " + Perry.weights[1]);
-            console.log("Weight b: " + Perry.biasWeight);
+            console.log("Weight b: " + Perry.weights[2]);
 
             drawWeights();
 
