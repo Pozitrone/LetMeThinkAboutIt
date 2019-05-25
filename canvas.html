@@ -138,10 +138,12 @@
             let canvas = document.getElementById("canvas");
             let context = canvas.getContext("2d");
 
-            let x1 = -400;
-            let x2 = 400;
+            let x1 = -1;
+            let x2 = 1;
             let y1 = f(x1);
             let y2 = f(x2);
+
+            // Actual path
 
             context.beginPath();
             context.moveTo(pX(x1), pY(y1));
@@ -149,16 +151,18 @@
             context.strokeStyle = "#FF0000";
             context.stroke();
 
+            // Axis
+
             context.beginPath();
             context.lineWidth = 1;
             context.strokeStyle = "#000000";
-            context.moveTo(pX(-400), pY(0));
-            context.lineTo(pX(400), pY(0));
-            context.moveTo(pX(0), pY(-400));
-            context.lineTo(pX(0), pY(400));
+            context.moveTo(pX(-1), pY(0));
+            context.lineTo(pX(1), pY(0));
+            context.moveTo(pX(0), pY(-1));
+            context.lineTo(pX(0), pY(1));
             context.stroke();
 
-            //arr[0].inputs = [0,0];
+            // arr[0].inputs = [0,0];
         }
         var i = undefined;
 
@@ -181,18 +185,14 @@
             let dreamC = dream.getContext("2d");
 
 
+            //Guessed path
 
             dreamC.clearRect(0,0, dream.width, dream.height);
 
-            let dx1 = -400;
-            let dx2 = 400;
+            let dx1 = -1;
+            let dx2 = 1;
             let dy1 = Perry.guessY(dx1);
             let dy2 = Perry.guessY(dx2);
-
-            console.log(dx1, f(dx1));
-            console.log(dx2, f(dx2));
-            console.log(dx1, dy1);
-            console.log(dx2, dy2);
 
             dreamC.beginPath();
             dreamC.moveTo(pX(dx1), pY(dy1));
@@ -206,8 +206,10 @@
             arr.forEach(point => {
                 let inputs = point.inputs;
                 let answer = point.answer;
-                Perry.train(inputs, answer, 1);
+                Perry.train(inputs, answer, 0.01);
             }); 
+
+
             console.log("== Iteration " + it*iterations + " ==");
             console.log("Weight x: " + Perry.weights[0]);
             console.log("Weight y: " + Perry.weights[1]);

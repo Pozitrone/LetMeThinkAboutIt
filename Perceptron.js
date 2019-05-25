@@ -2,15 +2,17 @@ var width = 800;
 var height = 800;
 
 function f(x){
-    //y = ax+b
-    return 4 * x + 100;
+    //-------------------------------------
+    let y =  0.5 * x + .356;
+    //-------------------------------------
+    return y;
 }
 function pX(x){
-    return x + width/2;
+    return map(x,-1,1,0,width);
 }
 
 function pY(y){
-    return height/2 - y; 
+    return map(y,-1,1,height,0); 
 }
 
 function getRandom(min, max) {
@@ -23,6 +25,10 @@ function randInt(max) {
 
 function sign(num){
     return num > 0 ? 1 : -1;
+}
+
+function map(value, minA, maxA, minB, maxB) {
+    return (1 - ((value - minA) / (maxA - minA))) * minB + ((value - minA) / (maxA - minA)) * maxB;
 }
 
 
@@ -42,7 +48,7 @@ class Perceptron{
         return sign(sum);
     }
 
-    train(inputs, answer, learningRate = 0.01){
+    train(inputs, answer, learningRate = 0.001){
         let canvas = document.getElementById("canvas");
         let context = canvas.getContext("2d");
         let guess = this.guess(inputs);
@@ -62,7 +68,7 @@ class Perceptron{
     }
 
     guessY(x){
-        return (- this.weights[2]*800 - this.weights[0] * x ) / this.weights[1];
+        return ((- this.weights[2]- this.weights[0] * x ) / this.weights[1]);
     }
 
 }
@@ -77,8 +83,8 @@ class Point {
 
         this.inputs = new Array(n+1);
 
-        this.inputs[0] = randInt(width)-Math.floor(width/2);
-        this.inputs[1] = randInt(height)-Math.floor(height/2);
+        this.inputs[0] = getRandom(-1,1);
+        this.inputs[1] = getRandom(-1,1);
         this.inputs[2] = 1; //bias
         this.answer = this.solution(this.inputs);
 
@@ -86,7 +92,7 @@ class Point {
         let y = this.inputs[1];
 
         context.fillStyle = "#0000ff";
-        context.fillRect(pX(x-1),pY(y+1),10,10);
+        context.fillRect(pX(x)-1,pY(y)-1,10,10);
 
         context.fillStyle = this.answer == 1 ? "#aaa" : "#eee";
         context.fillRect(pX(x),pY(y),8,8);
