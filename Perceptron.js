@@ -3,7 +3,7 @@ var height = 800;
 
 function f(x){
     //y = ax+b
-    return 2 * x;
+    return 20;
 }
 
 
@@ -59,7 +59,6 @@ class Perceptron{
         for(let i = 0, j = this.weights.length; i < j; i++){
             this.weights[i] += error * inputs[i] * learningRate;
         }
-
         this.biasWeight += error * this.bias * learningRate;
 
         if(guess == answer){
@@ -69,6 +68,10 @@ class Perceptron{
             context.fillStyle = "#ff0000";
         }
         context.fillRect(pX(inputs[0]),pY(inputs[1]),8,8);
+    }
+
+    guessY(x){
+        return -(Perry.biasWeight/Perry.weights[1]) - (Perry.weights[0]/Perry.weights[1]) * x
     }
 
 }
@@ -81,12 +84,13 @@ class Point {
         let canvas = document.getElementById("canvas");
         let context = canvas.getContext("2d");
 
-        this.inputs[0] = randInt(width)-~~(width/2);
-        this.inputs[1] = randInt(height)-~~(height/2);
+        this.inputs[0] = randInt(width)-Math.floor(width/2);
+        this.inputs[1] = randInt(height)-Math.floor(height/2);
         this.answer = this.solution(this.inputs);
 
         let x = this.inputs[0];
         let y = this.inputs[1];
+
         context.fillStyle = "#0000ff";
         context.fillRect(pX(x-1),pY(y+1),10,10);
 

@@ -29,6 +29,17 @@
                 background-color: black;
                 padding: 3em;
                 font-weight: bold;
+                width: 200px;
+            }
+            #dream{
+                background-color: transparent;
+                position:absolute;
+                margin-left: calc(-803px);
+                margin-top: calc(50vh - 400px);
+                border: red 2px solid;
+            }
+            #autorun{
+                bottom: 20vh;
             }
         </style>
     </head>
@@ -149,14 +160,53 @@
 
             //arr[0].inputs = [0,0];
         }
+        var i = undefined;
+
+        function autorun(){
+            if(i){
+                clearInterval(i);
+                i = undefined;
+            }
+            else {
+                i = setInterval(_=>start(),100);
+            }
+            
+
+            
+        }
 
 
         function start(iterations=1){
+            let dream = document.getElementById("dream");
+            let dreamC = dream.getContext("2d");
+
+
+
+            dreamC.clearRect(0,0, dream.width, dream.height);
+
+            let dx1 = -400;
+            let dx2 = 400;
+            let dy1 = Perry.guessY(dx1);
+            let dy2 = Perry.guessY(dx2);
+
+            console.log(dx1, f(dx1));
+            console.log(dx2, f(dx2));
+            console.log(dx1, dy1);
+            console.log(dx2, dy2);
+
+            dreamC.beginPath();
+            dreamC.moveTo(pX(dx1), pY(dy1));
+            dreamC.lineTo(pX(dx2), pY(dy2));
+            dreamC.strokeStyle = "#2d7a34";
+            dreamC.stroke();
+
+
+
             it++;
             arr.forEach(point => {
                 let inputs = point.inputs;
                 let answer = point.answer;
-                Perry.train(inputs, answer);
+                Perry.train(inputs, answer, 0.1);
             }); 
             console.log("== Iteration " + it*iterations + " ==");
             console.log("Weight x: " + Perry.weights[0]);
@@ -169,7 +219,9 @@
             
         </script>
         <canvas id="canvas" width="800" height="800"></canvas>
+        <canvas id="dream" width="800" height="800"></canvas>
         <canvas id="perry" width="300" height="200"></canvas>
         <button onclick="start(1)">Run Perry, run!</button>
+        <button id="autorun" onclick="autorun()">Autorun Perry, autorun!</button>
     </body>
 </html>
