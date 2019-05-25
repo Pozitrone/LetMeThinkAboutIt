@@ -3,7 +3,7 @@ var height = 800;
 
 function f(x){
     //-------------------------------------
-    let y =  0.5 * x + .356;
+    let y = x * 5;
     //-------------------------------------
     return y;
 }
@@ -33,6 +33,7 @@ function map(value, minA, maxA, minB, maxB) {
 
 
 class Perceptron{
+    errorSum = 0;
     constructor (n) {
         this.weights = new Array(n+1);
         for (let i = 0, j = this.weights.length; i < j; i++){
@@ -54,6 +55,8 @@ class Perceptron{
         let guess = this.guess(inputs);
         let error = answer - guess;
 
+        this.errorSum += Math.abs(error);
+
         for(let i = 0, j = this.weights.length; i < j; i++){
             this.weights[i] += error * inputs[i] * learningRate;
         }
@@ -70,6 +73,8 @@ class Perceptron{
     guessY(x){
         return ((- this.weights[2]- this.weights[0] * x ) / this.weights[1]);
     }
+
+
 
 }
 

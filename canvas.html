@@ -174,16 +174,11 @@
             else {
                 i = setInterval(_=>start(),100);
             }
-            
-
-            
         }
-
 
         function start(iterations=1){
             let dream = document.getElementById("dream");
             let dreamC = dream.getContext("2d");
-
 
             //Guessed path
 
@@ -203,6 +198,7 @@
 
 
             it++;
+            Perry.errorSum = 0;
             arr.forEach(point => {
                 let inputs = point.inputs;
                 let answer = point.answer;
@@ -217,13 +213,17 @@
 
             drawWeights();
 
+            if(Perry.errorSum == 0){
+                clearInterval(i);
+            }
+
         }
             
         </script>
-        <canvas id="canvas" width="800" height="800"></canvas>
-        <canvas id="dream" width="800" height="800"></canvas>
-        <canvas id="perry" width="300" height="200"></canvas>
-        <button onclick="start(1)">Run Perry, run!</button>
-        <button id="autorun" onclick="autorun()">Autorun Perry, autorun!</button>
+            <canvas id="canvas" width="800" height="800"></canvas>
+            <canvas id="dream" width="800" height="800"></canvas>
+            <canvas id="perry" width="300" height="200"></canvas>
+            <button onclick="start(1)">Run Perry, run!</button>
+            <button id="autorun" onclick="autorun()">Autorun Perry, autorun!</button>
     </body>
 </html>
