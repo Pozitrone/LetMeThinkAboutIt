@@ -3,7 +3,7 @@ var height = 800;
 
 function f(x){
     //-------------------------------------
-    let y = x * 5;
+    let y = x * 2 + .35;
     //-------------------------------------
     return y;
 }
@@ -61,11 +61,11 @@ class Perceptron{
             this.weights[i] += error * inputs[i] * learningRate;
         }
 
-        if(guess == answer){
-            context.fillStyle = "#00ff00";
+        if(guess > 0){
+            context.fillStyle = "#aaa";
         }
         else{
-            context.fillStyle = "#ff0000";
+            context.fillStyle = "#eee";
         }
         context.fillRect(pX(inputs[0]),pY(inputs[1]),8,8);
     }
@@ -98,8 +98,7 @@ class Point {
 
         context.fillStyle = "#0000ff";
         context.fillRect(pX(x)-1,pY(y)-1,10,10);
-
-        context.fillStyle = this.answer == 1 ? "#aaa" : "#eee";
+        context.fillStyle = "#ffffff";
         context.fillRect(pX(x),pY(y),8,8);
     }
 
