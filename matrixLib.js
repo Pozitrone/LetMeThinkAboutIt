@@ -54,6 +54,24 @@ class Matrix {
         }
     }
 
+    mult(mx) {
+        let n = this.rows;
+        let m = this.columns;
+        let p = mx.columns;
+
+        var C = new Matrix(n,p);
+        for (let i = 0; i < n; i++){
+            for (let j = 0; j < p; j++){
+                let sum = 0;
+                for (let k = 0; k<m; k++){
+                    sum += this.matrix[i][k] * mx.matrix[k][j];
+                }
+                C.matrix[i][j] = sum;
+            }
+        }
+        return C;
+    }
+
     log() {
         console.table(this.matrix);
     }
