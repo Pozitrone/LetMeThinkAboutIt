@@ -4,6 +4,12 @@ class NeuralNetwork {
         this.hidden_nodes = HiddenAmount;
         this.output_nodes = OutputAmount;
     }
+
+    feedForward(input){
+
+
+        return guess;
+    }
 }
 
 
