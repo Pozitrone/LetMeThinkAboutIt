@@ -105,12 +105,30 @@ class Matrix {
         }
     }
 
+    static fromArray(arr){
+        let m = new Matrix(arr.length, 1);
+        for (let i = 0; i < arr.lenght; i++){
+            m.data[i][0] = arr[i];
+        }
+        return m;
+    }
+
+    toArray(){
+        let arr = [];
+        for (let i = 0; i < this.rows; i++){
+            for (let j = 0; j < this.columns; j++){
+                arr.push(this.data[i][j]);
+            }
+        }
+        return arr;
+    }
+
 
 
     randomize(){
         for (let i = 0; i < this.rows; i++){
             for (let j = 0; j < this.columns; j++){
-                this.data[i][j] = Math.floor(Math.random() * 10);
+                this.data[i][j] = Math.floor(Math.random() * 2 - 1);
             }
         } 
     }
@@ -121,15 +139,9 @@ class Matrix {
 }
 
 function setup(){
-    let m = new Matrix(2,3);
-    let n = new Matrix(3,2);
-    m.randomize();
-    n.randomize();
-    m.log();
-    n.log();
-
-
-    var c = m.multiply(n);
-    c.log();
+    let nn = new NeuralNetwork(2,2,1);
+    let input = [1,0];
+    let output = nn.feedForward(input);
+    console.log(output);
 }
 
