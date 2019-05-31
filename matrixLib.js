@@ -29,6 +29,21 @@ class Matrix {
         }  
     }
 
+    static subtract(m, n){
+        // Return m - n
+        if(m.columns != n.columns || m.rows != n.rows){
+            throw "Rows and columns don't match.";
+        }
+
+        let result = new Matrix(m.rows, m.columns);
+        for (let i = 0; i < m.rows; i++){
+            for (let j = 0; j < m.columns; j++){
+                result.data[i][j] = m.data[i][j] - n.data[i][j];
+            }
+        }
+        return result;
+    }
+
     static multiply(m ,n){
         if(m.columns !== n.rows){
             throw ("Columns of A != Rows of B");
@@ -74,12 +89,12 @@ class Matrix {
         this.rows = m.rows;
     }
 
-    static transpose(){
-        let m = new Matrix(this.columns,this.rows);
+    static transpose(a){
+        let m = new Matrix(a.columns,a.rows);
 
-        for (let i = 0; i < this.rows; i++){
-            for (let j = 0; j < this.columns; j++){
-                m.data[j][i] = this.data[i][j];
+        for (let i = 0; i < a.rows; i++){
+            for (let j = 0; j < a.columns; j++){
+                m.data[j][i] = a.data[i][j];
             }
         }
         return m;
@@ -107,7 +122,7 @@ class Matrix {
 
     static fromArray(arr){
         let m = new Matrix(arr.length, 1);
-        for (let i = 0; i < arr.lenght; i++){
+        for (let i = 0; i < arr.length; i++){
             m.data[i][0] = arr[i];
         }
         return m;
@@ -128,7 +143,7 @@ class Matrix {
     randomize(){
         for (let i = 0; i < this.rows; i++){
             for (let j = 0; j < this.columns; j++){
-                this.data[i][j] = Math.floor(Math.random() * 2 - 1);
+                this.data[i][j] = Math.random() * 2 - 1;
             }
         } 
     }
@@ -139,9 +154,11 @@ class Matrix {
 }
 
 function setup(){
-    let nn = new NeuralNetwork(2,2,1);
-    let input = [1,0];
-    let output = nn.feedForward(input);
-    console.log(output);
+    let nn = new NeuralNetwork(2,2,2);
+    let inputs = [1,0];
+    let targets = [1,0];
+    nn.train(inputs, targets);
+    // let output = nn.feedForward(input);
+    // console.log(output);
 }
 
