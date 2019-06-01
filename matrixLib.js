@@ -16,14 +16,14 @@ class Matrix {
         if(n instanceof Matrix){
             for (let i = 0; i < this.rows; i++){
                 for (let j = 0; j < this.columns; j++){
-                    this.data[i][j] *= n.data[i][j];
+                    this.data[i][j] += n.data[i][j];
                 }
             }
         }
         else{
             for (let i = 0; i < this.rows; i++){
                 for (let j = 0; j < this.columns; j++){
-                    this.data[i][j] *= n;
+                    this.data[i][j] += n;
                 }
             }
         }  
@@ -68,12 +68,20 @@ class Matrix {
     }
 
     multiply(n){
-        for (let i = 0; i < this.rows; i++){
-            for (let j = 0; j < this.columns; j++){
-                this.data[i][j] *= n;
+        if(n instanceof Matrix){
+            for (let i = 0; i < this.rows; i++){
+                for (let j = 0; j < this.columns; j++){
+                    this.data[i][j] *= n.data[i][j];
+                }
             }
         }
-         
+        else{
+            for (let i = 0; i < this.rows; i++){
+                for (let j = 0; j < this.columns; j++){
+                    this.data[i][j] *= n;
+                }
+            }
+        }  
     }
 
     transpose(){
@@ -108,6 +116,18 @@ class Matrix {
                 this.data[i][j] = fn(val);
             }
         }
+    }
+
+    static map(m, fn){
+        // Apply function to every element
+        let a = new Matrix(m.rows,m.columns);
+        for (let i = 0; i < m.rows; i++){
+            for (let j = 0; j < m.columns; j++){
+                let val = m.data[i][j];
+                a.data[i][j] = fn(val);
+            }
+        }
+        return a;
     }
 
     localEdit(fn, i, j){
