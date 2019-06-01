@@ -13,6 +13,8 @@ class NeuralNetwork {
         this.bias_o = new Matrix(this.output_nodes, 1);
         this.bias_h.randomize();
         this.bias_o.randomize();
+
+        this.learningRate = .1;
     }
 
     feedForward(input){
@@ -39,17 +41,56 @@ class NeuralNetwork {
         if(this.output_nodes != targets.length){
             throw "Output nodes don't match amount of targets.";
         }
-        let outputs = this.feedForward(inputs);
 
-        outputs = Matrix.fromArray(outputs);
+        let inputs = Matrix.fromArray(input);
+
+        // Generating hidden outputs
+        let hidden = Matrix.multiply(this.weights_ih, inputs);
+        hidden.add(this.bias_h);
+        hidden.map(sigmoid);
+
+        // Generating the output
+        let outputs = Matrix.multiply(this.weights_ho, hidden);
+        outputs.add(this.bias_o);
+        outputs.map(sigmoid);
+
+
         targets = Matrix.fromArray(targets);
 
         //calculate the error
         // Error = targets - outputs
 
         let output_errors = Matrix.subtract(targets,outputs);
+
+        //calculate gradient
+        let gradients = Matrix.map(outputs,dsigmoid);
+        gradients.multiply(output_errors);
+        gradients.multiply(this.learningRate);
+
+        //calculate output deltas
+        let hidden_T = Matrix.transpose(hidden);
+        let weigths_ho_deltas = Matrix.multiply(gradients, hidden_T);
+
+        this.weights_ho.add(weigths_ho_deltas);
+
+        //-------
+
+        //calculate hidden layers errors
         let weights_ho_t = Matrix.transpose(this.weights_ho);
         let hidden_errors = Matrix.multiply(weights_ho_t, output_errors);
+
+        // calculate hidden gradient
+        let hidden_gradient = Matrix.map(hidden,dsigmoid);
+        hidden_gradient.multiply(hidden_errors);
+        hidden_gradient.multiply(this.learningRate);
+
+        // calculate hidden deltas
+        let inputs_T = Matrix.transpose(inputs);
+        let weights_ih_deltas = Matrix.multiply(hidden_gradient, inputs_T);
+
+        this.weights_ih.add(weights_ih_deltas);
+
+         
 
 
         outputs.log();
@@ -60,6 +101,11 @@ class NeuralNetwork {
 
 function sigmoid(x){
     return 1 / (1+Math.exp(-x));
+}
+
+function dsigmoid(y){
+    //return (sigmoid(x) * (1 - sigmoid(x)));
+    return (y * (1 - y));
 }
 
 
