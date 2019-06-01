@@ -3,6 +3,7 @@
         <script src="./Perceptron.js"></script>
         <script src="./matrixLib.js"></script>
         <script src="./NeuralNetworkLib.js"></script>
+        <script src="./setup.js"></script>
                <meta charset="UTF-8">
         <style>
             #canvas{
@@ -45,126 +46,13 @@
             }
         </style>
     </head>
+
     <body onload="jsOnInit()">
         <script>
-            var Perry = new Perceptron(2);    
-            var arr = new Array();
-            var it = 0;
-
-
-        function drawNeuron(){
-            let neuron = document.getElementById("perry");
-            let ctx = neuron.getContext("2d");
-
-            ctx.setLineDash([]);
-
-            ctx.beginPath();
-            ctx.textAlign = "left";
-            ctx.font = "25px Arial";
-            ctx.fillStyle = "white";
-            ctx.fillText("X", 10, 30);
-            ctx.fillText("Y", 10, 110);
-            ctx.fillText("b", 10, 190);
-            ctx.fillText("O", 270, 110);
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.font = "20px Arial";
-            ctx.fillStyle = "white";
-            ctx.textAlign = "center";
-            ctx.fillText("Perry", 150, 105);
-            ctx.stroke();
-
-
-            ctx.stroke();
-            ctx.strokeStyle = "white";
-            ctx.beginPath();
-            ctx.lineWidth = 2;
-            ctx.arc(150, 100, 40, 0, 2 * Math.PI);
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.lineWidth = 10;
-            ctx.moveTo(200, 100);
-            ctx.lineTo(260,100);
-            ctx.stroke();
-
-
-
-            
-        }
-        
-        function drawWeights(){
-            let neuron = document.getElementById("perry");
-                let ctx = neuron.getContext("2d");
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawNeuron();
-
-                
-                ctx.beginPath();
-                ctx.setLineDash([5,5]);
-                ctx.lineWidth = 10 * Math.abs(Perry.weights[0]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.weights[2]));
-                ctx.moveTo(40, 30);
-                ctx.lineTo(100,70);
-                ctx.stroke();
-
-                ctx.beginPath();
-                ctx.setLineDash([5,5]);
-                ctx.lineWidth = 10 * Math.abs(Perry.weights[1]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.weights[2]));
-                ctx.moveTo(40, 100);
-                ctx.lineTo(100,100);
-                ctx.stroke();
-
-                ctx.beginPath();
-                ctx.setLineDash([5,5]);
-                ctx.lineWidth = 10 * Math.abs(Perry.weights[2]) / (Math.abs(Perry.weights[0]) + Math.abs(Perry.weights[1]) + Math.abs(Perry.weights[2]));
-                ctx.moveTo(40, 180);
-                ctx.lineTo(100,140);
-                ctx.stroke();
-        }
-
+        var nn = new NeuralNetwork(2,4,1);
+        nn.learningRate = 1;
         function jsOnInit(){
-            for (let i = 0; i < 1000; i++){
-                arr.push(new Point(2));
-            }
-
-            drawNeuron();
-
-            setTimeout(()=>{
-                console.log("== Iteration " + it + " ==");
-                console.log("Weight x: " + Perry.weights[0]);
-                console.log("Weight y: " + Perry.weights[1]);
-                console.log("Weight b: " + Perry.weights[2]);
-            },100);
             
-            let canvas = document.getElementById("canvas");
-            let context = canvas.getContext("2d");
-
-            let x1 = -1;
-            let x2 = 1;
-            let y1 = f(x1);
-            let y2 = f(x2);
-
-            // Actual path
-
-            context.beginPath();
-            context.moveTo(pX(x1), pY(y1));
-            context.lineTo(pX(x2), pY(y2));
-            context.strokeStyle = "#FF0000";
-            context.stroke();
-
-            // Axis
-
-            context.beginPath();
-            context.lineWidth = 1;
-            context.strokeStyle = "#000000";
-            context.moveTo(pX(-1), pY(0));
-            context.lineTo(pX(1), pY(0));
-            context.moveTo(pX(0), pY(-1));
-            context.lineTo(pX(0), pY(1));
-            context.stroke();
-
-            // arr[0].inputs = [0,0];
         }
         var i = undefined;
 
@@ -179,53 +67,50 @@
         }
 
         function start(iterations=1){
-            let dream = document.getElementById("dream");
-            let dreamC = dream.getContext("2d");
+            draw();
 
-            //Guessed path
-
-            dreamC.clearRect(0,0, dream.width, dream.height);
-
-            let dx1 = -1;
-            let dx2 = 1;
-            let dy1 = Perry.guessY(dx1);
-            let dy2 = Perry.guessY(dx2);
-
-            dreamC.beginPath();
-            dreamC.moveTo(pX(dx1), pY(dy1));
-            dreamC.lineTo(pX(dx2), pY(dy2));
-            dreamC.strokeStyle = "#2d7a34";
-            dreamC.stroke();
-
-
-
-            it++;
-            Perry.errorSum = 0;
-            arr.forEach(point => {
-                let inputs = point.inputs;
-                let answer = point.answer;
-                Perry.train(inputs, answer, 0.01);
-            }); 
-
-
-            console.log("== Iteration " + it*iterations + " ==");
-            console.log("Weight x: " + Perry.weights[0]);
-            console.log("Weight y: " + Perry.weights[1]);
-            console.log("Weight b: " + Perry.weights[2]);
-
-            drawWeights();
-
-            if(Perry.errorSum == 0){
-                clearInterval(i);
+            for(let i = 0; i < 100; i++){
+                let data = training_data[Math.floor(Math.random() * 4)]
+                nn.train(data.inputs, data.targets);
             }
+            console.log("Trained 1 times");
 
+        }
+
+        function draw(){
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+
+            console.log(nn.feedForward([1,1]));
+            console.log(nn.feedForward([1,0]));
+            console.log(nn.feedForward([0,1]));
+            console.log(nn.feedForward([0,0]));
+
+            let resolution = 10;
+            let cols = 800 / resolution;
+            let rows = 800 / resolution;
+            for (let i = 0; i < cols; i++){
+                for (let j = 0; j < rows; j++){
+
+                    let x1 = i/cols;
+                    let x2 = j/rows;
+                    let inputs = [x1, x2];
+
+                    let y = nn.feedForward(inputs);
+                    let color = y * 255;
+
+                    //randomColor
+                    // let color = Math.floor(Math.random() * 255);
+
+                    ctx.fillStyle = 'rgb(' +color + ',' + color + ',' + color + ')';
+                    ctx.fillRect(i*resolution,j*resolution,resolution,resolution);
+                }
+            }
         }
             
         </script>
             <canvas id="canvas" width="800" height="800"></canvas>
-            <canvas id="dream" width="800" height="800"></canvas>
-            <canvas id="perry" width="300" height="200"></canvas>
-            <button onclick="start(1)">Run Perry, run!</button>
-            <button id="autorun" onclick="autorun()">Autorun Perry, autorun!</button>
+            <button onclick="start(1)">Run once</button>
+            <button id="autorun" onclick="autorun()">Autorun</button>
     </body>
 </html>

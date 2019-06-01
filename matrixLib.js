@@ -173,12 +173,3 @@ class Matrix {
     }
 }
 
-function setup(){
-    let nn = new NeuralNetwork(2,2,2);
-    let inputs = [1,0];
-    let targets = [1,0];
-    nn.train(inputs, targets);
-    // let output = nn.feedForward(input);
-    // console.log(output);
-}
-

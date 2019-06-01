@@ -34,15 +34,15 @@ class NeuralNetwork {
         return output.toArray();
     }
 
-    train(inputs, targets){
-        if(this.input_nodes != inputs.length){
+    train(input_array, target_array){
+        if(this.input_nodes != input_array.length){
             throw "Input nodes don't match amount of inputs.";
         }
-        if(this.output_nodes != targets.length){
+        if(this.output_nodes != target_array.length){
             throw "Output nodes don't match amount of targets.";
         }
 
-        let inputs = Matrix.fromArray(input);
+        let inputs = Matrix.fromArray(input_array);
 
         // Generating hidden outputs
         let hidden = Matrix.multiply(this.weights_ih, inputs);
@@ -55,7 +55,7 @@ class NeuralNetwork {
         outputs.map(sigmoid);
 
 
-        targets = Matrix.fromArray(targets);
+        let targets = Matrix.fromArray(target_array);
 
         //calculate the error
         // Error = targets - outputs
@@ -71,7 +71,10 @@ class NeuralNetwork {
         let hidden_T = Matrix.transpose(hidden);
         let weigths_ho_deltas = Matrix.multiply(gradients, hidden_T);
 
+        // Adjust weights by deltas
         this.weights_ho.add(weigths_ho_deltas);
+        // Adjus bias weights
+        this.bias_o.add(gradients);
 
         //-------
 
@@ -88,14 +91,11 @@ class NeuralNetwork {
         let inputs_T = Matrix.transpose(inputs);
         let weights_ih_deltas = Matrix.multiply(hidden_gradient, inputs_T);
 
+        // Adjust ih weights
         this.weights_ih.add(weights_ih_deltas);
 
-         
-
-
-        outputs.log();
-        targets.log();
-        output_errors.log();
+        //Adjust bias weight
+        this.bias_h.add(hidden_gradient);
     }
 }
 
